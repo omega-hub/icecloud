@@ -13,6 +13,7 @@ class SectionPanel:
         self.container = Container.create(ContainerLayout.LayoutFree, uiroot)
         self.container.setStyle("fill: #202025; border: 1 #aaaaff")
         self.container.setAutosize(False)
+        self.container.setScale(Platform.scale)
 
         self.dragger = Label.create(self.container)
         self.dragger.setText("Section Panel")
