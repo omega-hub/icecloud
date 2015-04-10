@@ -13,7 +13,6 @@ menuManager = MenuManager.createAndInitialize()
 sectionPanel = None
 
 # Import iceCloud function modules in this namespace
-import iceCore
 import diveLayer
 import sondeLayer
 import meshLayer
