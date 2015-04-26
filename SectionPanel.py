@@ -7,9 +7,12 @@ class SectionPanel:
     #---------------------------------------------------------------------------
     def __init__(self, uiroot, width):
         icecloud.sectionPanel = self
+        
+        s = 1.0#Platform.scale
+        
         self.uiroot = uiroot
-        self.width = width
-        self.barHeight = 64
+        self.width = width * s
+        self.barHeight = 64 * s
         self.container = Container.create(ContainerLayout.LayoutFree, uiroot)
         self.container.setStyle("fill: #202025; border: 1 #aaaaff")
         self.container.setAutosize(False)
@@ -21,7 +24,9 @@ class SectionPanel:
         self.dragger.setStyle('fill: #aaaaff')
         self.dragger.setEnabled(True)
         self.dragger.setDraggable(True)
-        self.dragger.setSize(Vector2(width + icecloud.sideMargin * 2, icecloud.panelBarHeight))
+        
+        dsize = Vector2(width + icecloud.sideMargin * 2 * s, icecloud.panelBarHeight * s)
+        self.dragger.setSize(dsize)
         self.dragger.setPinned(True)
         self.dragger.setAutosize(False)
         
@@ -30,14 +35,14 @@ class SectionPanel:
         self.divesButton = Button.create(self.container)
         self.divesButton.setText("Select Dive")
         self.divesButton.setStyle('border-bottom: 4 black')
-        self.divesButton.setPosition(Vector2(width - 40, self.dragger.getHeight() + 5))
+        self.divesButton.setPosition(Vector2(width - 40 * s, self.dragger.getHeight() + 5 * s))
         self.divesButton.getLabel().setStyle('align: middle-left;')
         evt = 'icecloud.sectionPanel.showDivesMenu()';
         self.divesButton.setUIEventCommand(evt)
         
         
         self.bar = icecloud.SectionBar(self.container, self, width, self.barHeight)
-        self.bar.container.setPosition(Vector2(0, 50))
+        self.bar.container.setPosition(Vector2(0, 50 * s))
         
         self.diveMenu = icecloud.menuManager.createMenu('sectionDives')
         icecloud.uiroot.removeChild(self.diveMenu.getContainer())
@@ -55,7 +60,7 @@ class SectionPanel:
         self.paramButton.setText("Active Parameter")
         self.paramButton.setStyle('border-bottom: 4 black')
         sbc = self.bar.container
-        self.paramButton.setPosition(Vector2(width - 60, sbc.getPosition().y + sbc.getHeight() + 5))
+        self.paramButton.setPosition(Vector2(width - 60 * s, sbc.getPosition().y + sbc.getHeight() + 5 * s))
         self.paramButton.getLabel().setStyle('align: middle-left;')
         evt = 'icecloud.sectionPanel.showParamMenu()';
         self.paramButton.setUIEventCommand(evt)
@@ -81,26 +86,26 @@ class SectionPanel:
         b.getButton().setRadio(True)
         
         # Setup the parameter sliders
-        pad = 24
+        pad = 24 * s
         self.paramStartLabel = Label.create(self.container)
         self.paramStartLabel.setText("Start Param Name Value")
         self.paramStartLabel.setStyle('align: middle-left')
-        self.paramStartLabel.setPosition(Vector2(10, self.paramButton.getPosition().y + pad))
+        self.paramStartLabel.setPosition(Vector2(10 * s, self.paramButton.getPosition().y + pad))
         self.paramStartSlider = Slider.create(self.container)
-        self.paramStartSlider.setPosition(Vector2(260, self.paramButton.getPosition().y + pad))
-        self.paramStartSlider.setWidth(200)
+        self.paramStartSlider.setPosition(Vector2(260 * s, self.paramButton.getPosition().y + pad))
+        self.paramStartSlider.setWidth(200 * s)
         self.paramStartSlider.setUIEventCommand("icecloud.sectionPanel.onParamValueChange()")
 
         self.paramEndLabel = Label.create(self.container)
         self.paramEndLabel.setText("End Param Name Value")
-        self.paramEndLabel.setPosition(Vector2(10, self.paramStartSlider.getPosition().y + pad))
+        self.paramEndLabel.setPosition(Vector2(10 * s, self.paramStartSlider.getPosition().y + pad))
         self.paramEndLabel.setStyle('align: middle-left')
         self.paramEndSlider = Slider.create(self.container)
-        self.paramEndSlider.setPosition(Vector2(260, self.paramStartSlider.getPosition().y + pad))
-        self.paramEndSlider.setWidth(200)
+        self.paramEndSlider.setPosition(Vector2(260 * s, self.paramStartSlider.getPosition().y + pad))
+        self.paramEndSlider.setWidth(200 * s)
         self.paramEndSlider.setUIEventCommand("icecloud.sectionPanel.onParamValueChange()")
         
-        self.container.setSize(Vector2(width + icecloud.sideMargin * 2, self.paramEndSlider.getPosition().y + pad))
+        self.container.setSize(Vector2(width + icecloud.sideMargin * 2 * s, self.paramEndSlider.getPosition().y + pad))
         
         self.onSectionSelected(None)
         
@@ -117,7 +122,7 @@ class SectionPanel:
             evt = 'icecloud.sectionPanel.groups["{0}"].show()'.format(groupName)
             self.diveMenu.addButton(groupName, evt)
             groupMenu = icecloud.menuManager.createMenu('sections-' + groupName)
-            groupMenu.getContainer().setPosition(Vector2(self.divesButton.getPosition().x, 46))
+            groupMenu.getContainer().setPosition(Vector2(self.divesButton.getPosition().x, self.divesButton.getPosition().y + self.divesButton.getHeight()))
             icecloud.uiroot.removeChild(groupMenu.getContainer())
             self.container.addChild(groupMenu.getContainer())
             self.groups[groupName] = groupMenu
@@ -143,7 +148,8 @@ class SectionPanel:
             self.diveMenu.show()
             mc = self.diveMenu.getContainer()
             #mc.setPosition(self.container.getPosition() + Vector2(self.container.getWidth(), 0))
-            mc.setPosition(Vector2(self.divesButton.getPosition().x, 46))
+            s = Platform.scale
+            mc.setPosition(Vector2(self.divesButton.getPosition().x, 46 * s))
         
     #---------------------------------------------------------------------------
     def onDiveSelect(self, name):
@@ -204,6 +210,7 @@ class SectionPanel:
             self.paramMenu.show()
             mc = self.paramMenu.getContainer()
             #mc.setPosition(self.container.getPosition() + Vector2(self.container.getWidth(), 0))
+            s = Platform.scale
             mc.setPosition(self.paramButton.getPosition() + Vector2(0, self.paramButton.getHeight()))
         
     #---------------------------------------------------------------------------
