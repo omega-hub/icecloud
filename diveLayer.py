@@ -19,6 +19,9 @@ poseTranslation = [ 1371377, 435670, 0 ]
 # root, but user can set it to something else
 diveSceneRoot = SceneNode.create("diveRoot")
 
+# Stores the currently active dive
+activeDive = None
+
 #------------------------------------------------------------------------------
 # Load GLSL shaders used to render dive point clouds
 shaderPath = "icecloud/shaders/";

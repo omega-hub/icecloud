@@ -16,18 +16,12 @@ sectionPanel = None
 import diveLayer
 import sondeLayer
 import meshLayer
-import sectionManager
 import topDown
-import windowManager
 
 # Import iceCloud classes in this namespace
 from Dive import *
 from DiveMenu import *
 from LODInfo import *
-from SectionData import *
-from SectionBar import *
-from SectionPanel import *
-from PlotPanel import *
 
 getDefaultCamera().setNearFarZ(1, 10000)
 

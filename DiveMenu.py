@@ -1,15 +1,18 @@
 from omega import *
 from omegaToolkit import *
 import icecloud
+import diveLayer
 
 groups = {}
+activeDiveGroups = {}
 groupToggleButtons = {}
 groupMenuButtons = {}
 dives = {}
 
 # Initialize menu
 mm = MenuManager.createAndInitialize()
-diveMenu = mm.getMainMenu().addSubMenu('Dives')
+diveMenu = mm.getMainMenu().addSubMenu('Visible Dives')
+activeDiveMenu = mm.getMainMenu().addSubMenu('Active Dive')
 diveDisplayMenu = mm.getMainMenu().addSubMenu('Dive Display Mode')
 
 diveDisplayMenu.addLabel("Point Size")
@@ -112,6 +115,12 @@ def addDive(dive):
     groupMenuButtons[groupName].append(b.getButton())
     dives[dive.id] = dive
 
+    if(not groupName in activeDiveGroups):
+        groupMenu = activeDiveMenu.addSubMenu(groupName)
+        activeDiveGroups[groupName] = groupMenu
+    evt = 'icecloud.DiveMenu.onActiveDiveSelect("{0}")'.format(dive.id)
+    activeDiveGroups[groupName].addButton(dive.label, evt)
+
     
 #-------------------------------------------------------------------------------
 def onSelectAllToggle(name):
@@ -124,9 +133,16 @@ def onSelectAllToggle(name):
 def onDiveToggle(name, value):
     d = dives[name]
     if(value):
-        d.showPose()
         d.showPoints()
     else:
         d.hidePose()
         d.hidePoints()
-    
+
+#-------------------------------------------------------------------------------
+def onActiveDiveSelect(name):
+    d = dives[name]
+    if(diveLayer.activeDive != None):
+        diveLayer.activeDive.hidePose()
+    diveLayer.activeDive = d
+    diveLayer.activeDive.showPose()
+        

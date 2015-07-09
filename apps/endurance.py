@@ -4,8 +4,8 @@ import icecloud
 UiModule.instance().setPointerInteractionEnabled(True)
 
 
-divePath = "/data/evl/febret/dttools/data-mh/bonney/"
-posePath = "/data/bonney_2009/"
+divePath = "F:/ENDURANCE/dttools/trunk/data-mh/bonney/"
+posePath = "F:/ENDURANCE/test-dives/bonney_2009/"
 lod = icecloud.LODInfo(10000,1, 10, 1, 10)
 
 diveFile = divePath + "bonney-09-dive27.xyzb"
@@ -20,15 +20,7 @@ icecloud.DiveMenu.addDives([d, d2])
 icecloud.sondeLayer.load()
 
 # load a mesh
-icecloud.meshLayer.loadMesh("Sonde Bathymetry", "icecloud/data/bonney-sonde-bathy.obj")
-
-uim = UiModule.createAndInitialize()
-sp = icecloud.SectionPanel(icecloud.uiroot, 400)
-sp.addDives([d, d2])
-
-sp.container.setPosition(Vector2(4000, 3000))
+#icecloud.meshLayer.loadMesh("Sonde Bathymetry", "icecloud/data/bonney-sonde-bathy.obj")
 
 getDefaultCamera().getController().setSpeed(100)
-
-icecloud.sectionManager.dives = [d, d2]
 

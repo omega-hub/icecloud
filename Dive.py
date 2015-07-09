@@ -1,6 +1,4 @@
 import diveLayer
-import SectionData
-import PlotPanel
 import os.path
 
 from math import *
@@ -62,10 +60,6 @@ class Dive:
         self.timestampMin = 0
         self.timestampMax = 0
         
-        self.sectionData = SectionData.SectionData()
-        self.sectionData.load(id + ".json")
-        self.sectionData.dive = self
-
     #---------------------------------------------------------------------------
     def loadPose(self):
         if(not os.path.exists(self.poseFile)):
@@ -169,7 +163,7 @@ class Dive:
             diveLayer.attribMaxBound.y,
             maxz))
         
-        print("Points loaded: " + self.poseModel.name)
+        print("Points loaded: " + self.pointsModel.name)
 
     #---------------------------------------------------------------------------
     def showPoints(self):
@@ -193,11 +187,6 @@ class Dive:
             #mat.attachUniform(diveLayer.minAttrib)
             #mat.attachUniform(diveLayer.maxAttrib)
             
-            s1 = SectionData.SectionInfo()
-            s1.reset(self)
-            self.sectionData.sections = [s1]
-            self.sectionData.refresh()
-            
             # HACK: dive needs to be re-oriented
             self.pointsObject.pitch(radians(90))
             if(len(self.plotMaterial) > 0):
@@ -210,7 +199,7 @@ class Dive:
         self.pointsObject.setVisible(True)
 
         # Update axes of 2D plots
-        PlotPanel.refreshPlotAxes()
+        #PlotPanel.refreshPlotAxes()
 
 
     #---------------------------------------------------------------------------
@@ -219,7 +208,7 @@ class Dive:
             self.pointsObject.setVisible(False)
             self.freeColor()
             # Update axes of 2D plots
-            PlotPanel.refreshPlotAxes()
+            #PlotPanel.refreshPlotAxes()
 
     #---------------------------------------------------------------------------
     def allocColor(self):
