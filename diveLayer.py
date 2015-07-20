@@ -36,6 +36,17 @@ pointsSectionProgram.geometryInput = PrimitiveType.Points
 pointsSectionProgram.geometryOutput = PrimitiveType.TriangleStrip
 getSceneManager().addProgram(pointsSectionProgram)
 
+pointsActiveProgram = ProgramAsset()
+pointsActiveProgram.name = "points-active"
+pointsActiveProgram.vertexShaderName = shaderPath + "sonarPoint.vert"
+pointsActiveProgram.fragmentShaderName = shaderPath + "sonarPoint.frag"
+pointsActiveProgram.geometryShaderName = shaderPath + "sonarPoint-active.geom"
+pointsActiveProgram.geometryOutVertices = 4
+pointsActiveProgram.geometryInput = PrimitiveType.Points
+pointsActiveProgram.geometryOutput = PrimitiveType.TriangleStrip
+getSceneManager().addProgram(pointsActiveProgram)
+
+
 pointScale = Uniform.create('pointScale', UniformType.Float, 1)
 fieldMin = Uniform.create('unif_FieldMin', UniformType.Float, 1)
 fieldMax = Uniform.create('unif_FieldMax', UniformType.Float, 1)

@@ -31,7 +31,7 @@ main(void)
         //if(unif_SectionFlags[i] == 0)
         //    gl_FrontColor = gl_FrontColorIn[0];
         //else
-        gl_FrontColor = vec4(0.5,0.5,0,1);
+        gl_FrontColor = vec4(0.5,1,0,1);
 
         eye_position = gl_PositionIn[0];
         vertex_light_position = normalize(gl_LightSource[0].position.xyz - eye_position.xyz);

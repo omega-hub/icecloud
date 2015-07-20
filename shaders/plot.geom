@@ -17,22 +17,20 @@ uniform vec3 unif_MinAttrib[16];
 void
 main(void)
 {
-    gl_FrontColor = vec4(1,0,0,1);
-    for(int i = 0; i < unif_NumSections; i++)
-    {
-        if(var_Timestamp[0] >= unif_SectionBounds[i][0] &&
-            var_Timestamp[0] < unif_SectionBounds[i][1])
+    /*gl_FrontColor = vec4(1,0,0,1);
+    if(var_Timestamp[0] >= unif_SectionBounds[i][0] &&
+        var_Timestamp[0] < unif_SectionBounds[i][1])
+        {
+            if(all(greaterThan(var_Attribs[0], unif_MinAttrib[i])) && 
+                all(lessThan(var_Attribs[0], unif_MaxAttrib[i])))
             {
-                if(all(greaterThan(var_Attribs[0], unif_MinAttrib[i])) && 
-                    all(lessThan(var_Attribs[0], unif_MaxAttrib[i])))
-                {
-                    if(unif_SectionFlags[i] == 0)
-                        gl_FrontColor = gl_FrontColorIn[0];
-                    else
-                        gl_FrontColor = vec4(0,1,0,1);
-                }
-        }
-    }
+                if(unif_SectionFlags[i] == 0)
+                    gl_FrontColor = gl_FrontColorIn[0];
+                else
+                    gl_FrontColor = vec4(0,1,0,1);
+            }
+    }*/
+    gl_FrontColor = vec4(0,1,0,1);
     
     float halfsize = pointScale;
     

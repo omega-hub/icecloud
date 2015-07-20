@@ -17,6 +17,7 @@ import diveLayer
 import sondeLayer
 import meshLayer
 import topDown
+import selectionBar
 
 # Import iceCloud classes in this namespace
 from Dive import *

@@ -9,8 +9,8 @@ import csv
 #sondeDropsFile = "SondeBasedBathymetry28-Mar-2013.csv"
 sondeDropsFile = "SondeBasedBathymetry28-Mar-2013_10-Jul-2013.csv"
 #sondeDropsFile = "SondeAndPickedBathymetry-19July13_MO_corrected.csv"
-#sondeDropsDir = "D:/Workspace/omegalib/apps/endurance/data"
-sondeDropsDir = "F:/ENDURANCE/test-dives/bonney_2009/vis/appData/endurance"
+sondeDropsDir = "D:/Workspace/omegalib/apps/endurance"
+#sondeDropsDir = "F:/ENDURANCE/test-dives/bonney_2009/vis/appData/endurance"
 
 sondeDropsPath = sondeDropsDir + "/" + sondeDropsFile
 

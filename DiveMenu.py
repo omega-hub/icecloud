@@ -2,6 +2,7 @@ from omega import *
 from omegaToolkit import *
 import icecloud
 import diveLayer
+import selectionBar
 
 groups = {}
 activeDiveGroups = {}
@@ -143,6 +144,9 @@ def onActiveDiveSelect(name):
     d = dives[name]
     if(diveLayer.activeDive != None):
         diveLayer.activeDive.hidePose()
+        diveLayer.activeDive.setActive(False)
+    d.setActive(True)
     diveLayer.activeDive = d
     diveLayer.activeDive.showPose()
+    selectionBar.setActiveDive(d)
         

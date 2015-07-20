@@ -6,6 +6,8 @@ from cyclops import *
 from omega import *
 from euclid import *
 
+import selectionBar
+
 # Table used to assign colors to dives.
 colorTable = [
     [Color('#900000'), False],
@@ -48,7 +50,7 @@ class Dive:
         self.pointsObject = None
         self.diveInfo = None
         self.colorId = 0
-        self.plotMaterial = []
+        self.plotMaterial = None
         
         # Data ranges
         self.angleMin = 0
@@ -110,6 +112,28 @@ class Dive:
         if(self.poseObject != None):
             self.poseObject.setVisible(False)
 
+    #---------------------------------------------------------------------------
+    def setActive(self, active):
+        if(self.pointsObject != None):
+            mat = self.pointsObject.getMaterial()
+            if(active == True):
+                mat.setProgram(diveLayer.pointsActiveProgram.name)
+                if(self.plotMaterial == None):
+                    material = Material.create()
+                    material.setProgram('plot')
+                    material.attachUniform(selectionBar.pointScale)
+                    material.attachUniform(selectionBar.xboundsu)
+                    material.attachUniform(selectionBar.yboundsu)
+                    material.attachUniform(selectionBar.xu)
+                    material.attachUniform(selectionBar.yu)
+                    self.plotMaterial = material
+                    self.pointsObject.addMaterial(material)
+                #self.plotMaterial.setCamera(selectionBar.camera)
+            else:
+                mat.setProgram(diveLayer.pointsSectionProgram.name)
+                if(self.plotMaterial != None):
+                    self.plotMaterial.setCamera(selectionBar.disabledCamera)
+            
     #---------------------------------------------------------------------------
     def loadPoints(self):
         # Now we have the pose binary file ready, load it.
@@ -189,9 +213,9 @@ class Dive:
             
             # HACK: dive needs to be re-oriented
             self.pointsObject.pitch(radians(90))
-            if(len(self.plotMaterial) > 0):
-                for m in self.plotMaterial:
-                    self.pointsObject.addMaterial(m)
+            #if(len(self.plotMaterial) > 0):
+            #    for m in self.plotMaterial:
+            #        self.pointsObject.addMaterial(m)
         
         cl = self.allocColor()
         self.colorId = cl[1]
