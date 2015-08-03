@@ -50,7 +50,6 @@ class Dive:
         self.pointsObject = None
         self.diveInfo = None
         self.colorId = 0
-        self.plotMaterial = None
         
         # Data ranges
         self.angleMin = 0
@@ -118,21 +117,8 @@ class Dive:
             mat = self.pointsObject.getMaterial()
             if(active == True):
                 mat.setProgram(diveLayer.pointsActiveProgram.name)
-                if(self.plotMaterial == None):
-                    material = Material.create()
-                    material.setProgram('plot')
-                    material.attachUniform(selectionBar.pointScale)
-                    material.attachUniform(selectionBar.xboundsu)
-                    material.attachUniform(selectionBar.yboundsu)
-                    material.attachUniform(selectionBar.xu)
-                    material.attachUniform(selectionBar.yu)
-                    self.plotMaterial = material
-                    self.pointsObject.addMaterial(material)
-                #self.plotMaterial.setCamera(selectionBar.camera)
             else:
                 mat.setProgram(diveLayer.pointsSectionProgram.name)
-                if(self.plotMaterial != None):
-                    self.plotMaterial.setCamera(selectionBar.disabledCamera)
             
     #---------------------------------------------------------------------------
     def loadPoints(self):
@@ -208,14 +194,12 @@ class Dive:
             mat.attachUniform(diveLayer.w2)
             mat.attachUniform(diveLayer.w3)
             mat.attachUniform(diveLayer.w4)
+            
             #mat.attachUniform(diveLayer.minAttrib)
             #mat.attachUniform(diveLayer.maxAttrib)
             
             # HACK: dive needs to be re-oriented
             self.pointsObject.pitch(radians(90))
-            #if(len(self.plotMaterial) > 0):
-            #    for m in self.plotMaterial:
-            #        self.pointsObject.addMaterial(m)
         
         cl = self.allocColor()
         self.colorId = cl[1]

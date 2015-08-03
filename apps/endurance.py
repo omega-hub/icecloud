@@ -4,8 +4,8 @@ import icecloud
 UiModule.instance().setPointerInteractionEnabled(True)
 
 
-divePath = "F:/ENDURANCE/dttools/trunk/data-mh/bonney/"
-posePath = "F:/ENDURANCE/test-dives/bonney_2009/"
+divePath = "X:/ENDURANCE/dttools/trunk/data-mh/bonney/"
+posePath = "X:/ENDURANCE/test-dives/bonney_2009/"
 lod = icecloud.LODInfo(10000,1, 10, 1, 10)
 
 diveFile = divePath + "bonney-09-dive27.xyzb"

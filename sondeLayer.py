@@ -52,13 +52,13 @@ def createSondeDrop(data, i, correctmh):
     stline.setThickness(0.5)
     if(i > 1000):
         stline.setThickness(1.5)
-    stname = Text3D.create('fonts/arial.ttf', 2, stname)
-    stname.setFacingCamera(getDefaultCamera())
-    stname.setPosition(Vector3(stx + 1, sty, 2))
-    stname.getMaterial().setDepthTestEnabled(False)
-    stname.getMaterial().setTransparent(True)
-    stname.setFixedSize(False)
-    stname.setFontSize(1)
+    # stname = Text3D.create('fonts/arial.ttf', 2, stname)
+    # stname.setFacingCamera(getDefaultCamera())
+    # stname.setPosition(Vector3(stx + 1, sty, 2))
+    # stname.getMaterial().setDepthTestEnabled(False)
+    # stname.getMaterial().setTransparent(True)
+    # stname.setFixedSize(False)
+    # stname.setFontSize(1)
 
     #dpname = Text3D.create('fonts/arial.ttf', 2, str(depth))
     #dpname.setFacingCamera(getDefaultCamera())
@@ -72,7 +72,7 @@ def createSondeDrop(data, i, correctmh):
     dpsp.setEffect('colored -e #404090')
     dpsp.setPosition(Vector3(stx, sty, depth))
 
-    sondeDrops.addChild(stname)
+    #sondeDrops.addChild(stname)
     #sondeDrops.addChild(dpname)
     sondeDrops.addChild(dpsp)
 

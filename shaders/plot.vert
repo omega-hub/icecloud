@@ -33,8 +33,9 @@ void main(void)
     
     // Size goes to -0.8 to 0.8 to have a bit of margin at plot bounds. 
     gl_Position.x = ((data[unif_XAxisId] - xmin) / (xmax - xmin) - 0.5) * 1.8;
-    gl_Position.y = ((data[unif_YAxisId] - ymin) / (ymax - ymin) - 0.5) * 1.8;
-    gl_Position.z = 0;
+    gl_Position.y = ((data[unif_YAxisId] - ymin) / (ymax - ymin) - 0.5) * -1.8;
+    gl_Position.z = 1;
+    gl_Position.w = 1;
     
     gl_FrontColor.rgba = vec4(1,1,1,1);
 }
