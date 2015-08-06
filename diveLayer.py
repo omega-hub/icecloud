@@ -38,9 +38,9 @@ getSceneManager().addProgram(pointsSectionProgram)
 
 pointsActiveProgram = ProgramAsset()
 pointsActiveProgram.name = "points-active"
-pointsActiveProgram.vertexShaderName = shaderPath + "sonarPoint.vert"
+pointsActiveProgram.vertexShaderName = shaderPath + "sonarPoint-active.vert"
 pointsActiveProgram.fragmentShaderName = shaderPath + "sonarPoint.frag"
-pointsActiveProgram.geometryShaderName = shaderPath + "sonarPoint-active.geom"
+pointsActiveProgram.geometryShaderName = shaderPath + "sonarPoint.geom"
 pointsActiveProgram.geometryOutVertices = 4
 pointsActiveProgram.geometryInput = PrimitiveType.Points
 pointsActiveProgram.geometryOutput = PrimitiveType.TriangleStrip

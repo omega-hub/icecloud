@@ -26,7 +26,7 @@ xu = Uniform.create('unif_XAxisId', UniformType.Int, 1)
 yu = Uniform.create('unif_YAxisId', UniformType.Int, 1)
 
 pointScale = Uniform.create('pointScale', UniformType.Float, 1)
-pointScale.setFloat(0.005)
+pointScale.setFloat(0.01)
 
 selectionPlotMaterial = Material.create()
 selectionPlotMaterial.setProgram('plot2')
@@ -36,11 +36,14 @@ selectionPlotMaterial.attachUniform(yboundsu)
 selectionPlotMaterial.attachUniform(xu)
 selectionPlotMaterial.attachUniform(yu)
 selectionPlotMaterial.setDepthTestEnabled(False)
+selectionPlotMaterial.setAdditive(True)
+selectionPlotMaterial.setTransparent(True)
 
 activeDive = None
 
 
 PLOT_PANEL_COLOR = "#aaaaff"
+SELECTOR_COLOR = "#8888ffff"
 
 # axis constants
 AXIS_X = 0
@@ -50,39 +53,47 @@ AXIS_ANGLE = 3
 AXIS_RANGE = 4
 AXIS_TIMESTAMP = 5
 
-plotWidth = 400
-plotHeight = 160
+plotWidth = 500
+plotHeight = 120
 container = Container.create(ContainerLayout.LayoutFree, icecloud.uiroot)
-container.setStyle("fill: #202025; border: 1 {0}".format(PLOT_PANEL_COLOR))
-#container.setAutosize(True)
+container.setStyle("fill: #000000; border: 1 {0}".format(PLOT_PANEL_COLOR))
+container.setAutosize(True)
 container.setPosition(Vector2(16, 16))
-container.setSize(Vector2(plotWidth + 2, plotHeight + 2))
-
-enabled = True
+container.setEnabled(False)
 
 # create camera
 camera = getOrCreateCamera('selectionCamera')
-camera.setEnabled(enabled)
+camera.setEnabled(True)
 coutput = PixelData.create(plotWidth, plotHeight, PixelFormat.FormatRgba)
 
-if(enabled):
-    camera.getOutput(0).setReadbackTarget(coutput)
-    camera.getOutput(0).setEnabled(True)
-    camera.setFlag(Material.CameraDrawExplicitMaterials)
-    camera.setPosition(200, 250, 600)
-    camera.lookAt(Vector3(0,0,0), Vector3(0.7,0,-0.3))
-    camera.setBackgroundColor(Color(0,0,0,1))
-    camera.clearColor(True)
-    dtc = camera.getCustomTileConfig()
-    dtc.enabled = True
-    dtc.topLeft = Vector3(-1, 0.5, -2)
-    dtc.bottomLeft = Vector3(-1, -0.5, -2)
-    dtc.bottomRight = Vector3(1, -0.5, -2)
-    selectionPlotMaterial.setCamera(camera)
+camera.getOutput(0).setReadbackTarget(coutput)
+camera.getOutput(0).setEnabled(True)
+camera.setFlag(Material.CameraDrawExplicitMaterials)
+camera.setBackgroundColor(Color(0,0,0,1))
+camera.clearColor(True)
+camera.setCullingEnabled(False)
+# Update bar every 2 seconds.
+camera.setMaxFps(0.5)
+selectionPlotMaterial.setCamera(camera)
 
-img = Image.create(icecloud.uiroot)
+img = Image.create(container)
 img.setData(coutput)
-img.setPosition(Vector2(0,0))
+offs = container.getMargin() + container.getPadding() / 2
+img.setPosition(Vector2(offs,offs))
+
+selector = Widget.create(container)
+selector.setStyle('fill: {0}'.format(SELECTOR_COLOR))
+selector.setAlpha(0.5)
+selector.setLayer(WidgetLayer.Front)
+selector.setSize(Vector2(100, plotHeight))
+selector.setPosition(Vector2(offs,offs))
+selectionStart = 0
+selectionEnd = 0
+
+diveName = Label.create(container)
+diveName.setLayer(WidgetLayer.Front)
+diveName.setPosition(Vector2(offs,offs))
+diveName.setText("")
 
 def setActiveDive(dive):
     global activeDive
@@ -90,6 +101,7 @@ def setActiveDive(dive):
         activeDive.pointsObject.removeMaterial(selectionPlotMaterial)
     activeDive = dive
     if(activeDive != None):
+        diveName.setText(activeDive.label)
         activeDive.pointsObject.addMaterial(selectionPlotMaterial)
         tmin = activeDive.diveInfo['minB']
         tmax = activeDive.diveInfo['maxB']
@@ -102,3 +114,72 @@ def setActiveDive(dive):
         yu.setInt(AXIS_DEPTH)
     
     
+def setSelection(start, end):
+    global selectionStart
+    global selectionEnd
+    global selection
+    selectionStart = start
+    selectionEnd = end
+    
+    if(activeDive != None):
+        activeDive.selection.setVector2f(Vector2(selectionStart, selectionEnd))
+    
+    # Adjust selection widget
+    ssx = selectionStart * plotWidth
+    sex = selectionEnd * plotWidth
+    selector.setPosition(Vector2(ssx + offs, offs))
+    selector.setWidth(sex - ssx)
+
+setSelection(0.0, 0.0)
+
+#-------------------------------------------------------------------------------
+# Selection bar interaction
+selectionMoveSpeed = 0
+selectionSizeSpeed = 0
+
+def onEvent():
+    global selectionMoveSpeed
+    global selectionSizeSpeed 
+    e = getEvent()
+    if(e.isButtonDown(EventFlags.ButtonLeft)):
+        selectionMoveSpeed = -0.2
+    elif(e.isButtonDown(EventFlags.ButtonRight)):
+        selectionMoveSpeed = 0.2
+    elif(e.isButtonDown(EventFlags.ButtonUp)):
+        selectionSizeSpeed = 0.2
+    elif(e.isButtonDown(EventFlags.ButtonDown)):
+        selectionSizeSpeed = -0.2
+    elif(e.getType() == EventType.Up):
+        selectionMoveSpeed = 0.0
+        selectionSizeSpeed = 0.0
+    
+def onUpdate(frame, time, dt):
+    global selectionMoveSpeed
+    global selectionSizeSpeed 
+    global selectionStart
+    global selectionEnd
+    
+    size = selectionEnd - selectionStart
+    center = selectionStart + size / 2
+        
+    center += selectionMoveSpeed * dt
+    size += selectionSizeSpeed * dt
+    
+    if(size <= 0.01): size = 0.01
+    if(center < 0 ): center = 0
+    if(center > 1): center = 1
+    
+    start = center - size / 2
+    end = center + size / 2
+    
+    setSelection(start, end)
+    
+    # Animate selection color
+    if(activeDive != None):
+        cv = abs(sin(time * 2))
+        sc = Color(1, 1 - cv, cv, 1)
+        activeDive.selectionColor.setColor(sc)
+    
+
+setEventFunction(onEvent)
+setUpdateFunction(onUpdate)

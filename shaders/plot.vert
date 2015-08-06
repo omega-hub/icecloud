@@ -31,11 +31,10 @@ void main(void)
     
     float data[6] = float[6](gl_Vertex.x, gl_Vertex.y, gl_Vertex.z, gl_Color.r, gl_Color.g, gl_Color.b);
     
-    // Size goes to -0.8 to 0.8 to have a bit of margin at plot bounds. 
-    gl_Position.x = ((data[unif_XAxisId] - xmin) / (xmax - xmin) - 0.5) * 1.8;
-    gl_Position.y = ((data[unif_YAxisId] - ymin) / (ymax - ymin) - 0.5) * -1.8;
+    gl_Position.x = ((data[unif_XAxisId] - xmin) / (xmax - xmin) - 0.5) * 2;
+    gl_Position.y = ((data[unif_YAxisId] - ymin) / (ymax - ymin) - 0.5) * -2;
     gl_Position.z = 1;
     gl_Position.w = 1;
     
-    gl_FrontColor.rgba = vec4(1,1,1,1);
+    gl_FrontColor = vec4(1,1,1,0.2);
 }

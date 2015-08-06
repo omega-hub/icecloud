@@ -51,6 +51,11 @@ class Dive:
         self.diveInfo = None
         self.colorId = 0
         
+        self.selection = Uniform.create('unif_Selection', UniformType.Vector2f, 1)
+        self.selectionColor = Uniform.create('unif_SelectionColor', UniformType.Color, 1)
+        self.xboundsu = Uniform.create('unif_XBounds', UniformType.Vector2f, 1)
+        self.xu = Uniform.create('unif_XAxisId', UniformType.Int, 1)
+        
         # Data ranges
         self.angleMin = 0
         self.angleMax = 0
@@ -117,6 +122,11 @@ class Dive:
             mat = self.pointsObject.getMaterial()
             if(active == True):
                 mat.setProgram(diveLayer.pointsActiveProgram.name)
+                tmin = self.diveInfo['minB']
+                tmax = self.diveInfo['maxB']
+                self.xboundsu.setVector2f(Vector2(tmin, tmax))
+                self.xu.setInt(selectionBar.AXIS_TIMESTAMP)
+                self.selectionColor.setColor(Color(selectionBar.SELECTOR_COLOR))
             else:
                 mat.setProgram(diveLayer.pointsSectionProgram.name)
             
@@ -195,8 +205,11 @@ class Dive:
             mat.attachUniform(diveLayer.w3)
             mat.attachUniform(diveLayer.w4)
             
-            #mat.attachUniform(diveLayer.minAttrib)
-            #mat.attachUniform(diveLayer.maxAttrib)
+            # Attach selection uniforms
+            mat.attachUniform(self.selection)
+            mat.attachUniform(self.selectionColor)
+            mat.attachUniform(self.xboundsu)
+            mat.attachUniform(self.xu)
             
             # HACK: dive needs to be re-oriented
             self.pointsObject.pitch(radians(90))

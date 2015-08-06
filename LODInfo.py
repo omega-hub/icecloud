@@ -6,4 +6,4 @@ class LODInfo:
         self.minDec = minDec
         self.maxDec = maxDec
         # TODO: implement actual LOD string generator.
-        self.lodOptionString = "500000 0:1000000:100 20:100:20 0:100:10"
+        self.lodOptionString = "500000 1000:1000000:50 200:1000:10 0:200:2"

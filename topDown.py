@@ -30,7 +30,6 @@ def setEnabled(value):
         c.setPosition(200, 2500, 600)
         c.lookAt(Vector3(0,0,0), Vector3(0.7,0,-0.3))
     else:
-        print('DISENABLED')
         # restore camera
         c.setPosition(cameraP)
         c.setOrientation(cameraO)
