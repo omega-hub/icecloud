@@ -142,11 +142,14 @@ def onDiveToggle(name, value):
 #-------------------------------------------------------------------------------
 def onActiveDiveSelect(name):
     d = dives[name]
+    mcc = getMissionControlClient()
     if(diveLayer.activeDive != None):
         diveLayer.activeDive.hidePose()
         diveLayer.activeDive.setActive(False)
+        if(mcc): mcc.postCommand('@endurance*:icecloud.dives["{0}"].setActive(False)'.format(diveLayer.activeDive.id))
     d.setActive(True)
     diveLayer.activeDive = d
     diveLayer.activeDive.showPose()
     selectionBar.setActiveDive(d)
+    if(mcc): mcc.postCommand('@endurance*:icecloud.dives["{0}"].setActive(True)'.format(name))
         

@@ -54,5 +54,8 @@ void main(void)
     if(value >= unif_Selection[0] && value <= unif_Selection[1])
         gl_FrontColor = unif_SelectionColor;
     else
-        gl_FrontColor = vec4(1,1,1,1);
+    {
+        gl_FrontColor = vec4(1,1,1,0.1);
+        //gl_Position = vec4(0,0,0,1);
+    }
 }

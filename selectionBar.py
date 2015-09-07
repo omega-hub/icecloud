@@ -26,7 +26,7 @@ xu = Uniform.create('unif_XAxisId', UniformType.Int, 1)
 yu = Uniform.create('unif_YAxisId', UniformType.Int, 1)
 
 pointScale = Uniform.create('pointScale', UniformType.Float, 1)
-pointScale.setFloat(0.01)
+pointScale.setFloat(0.002)
 
 selectionPlotMaterial = Material.create()
 selectionPlotMaterial.setProgram('plot2')
@@ -53,13 +53,16 @@ AXIS_ANGLE = 3
 AXIS_RANGE = 4
 AXIS_TIMESTAMP = 5
 
-plotWidth = 500
-plotHeight = 120
+plotWidth = 2000
+plotHeight = 480
 container = Container.create(ContainerLayout.LayoutFree, icecloud.uiroot)
 container.setStyle("fill: #000000; border: 1 {0}".format(PLOT_PANEL_COLOR))
 container.setAutosize(True)
 container.setPosition(Vector2(16, 16))
 container.setEnabled(False)
+#container.setScale(4)
+container.setCenter(Vector2(2000,2000))
+container.setDraggable(True)
 
 # create camera
 camera = getOrCreateCamera('selectionCamera')
@@ -123,6 +126,11 @@ def setSelection(start, end):
     
     if(activeDive != None):
         activeDive.selection.setVector2f(Vector2(selectionStart, selectionEnd))
+        mcc = getMissionControlClient()
+        if(mcc): 
+            mcc.postCommand('@endurance*:icecloud.dives["{0}"].setActive(True)'.format(activeDive.id))
+            mcc.postCommand('@endurance*:icecloud.dives["{0}"].selection.setVector2f(Vector2({1}, {2}))'.format(
+                activeDive.id, selectionStart, selectionEnd))
     
     # Adjust selection widget
     ssx = selectionStart * plotWidth
@@ -177,7 +185,7 @@ def onUpdate(frame, time, dt):
     # Animate selection color
     if(activeDive != None):
         cv = abs(sin(time * 2))
-        sc = Color(1, 1 - cv, cv, 1)
+        sc = Color(1 - cv, 1, 0, 1)
         activeDive.selectionColor.setColor(sc)
     
 

@@ -122,6 +122,7 @@ class Dive:
             mat = self.pointsObject.getMaterial()
             if(active == True):
                 mat.setProgram(diveLayer.pointsActiveProgram.name)
+                mat.setTransparent(True)
                 tmin = self.diveInfo['minB']
                 tmax = self.diveInfo['maxB']
                 self.xboundsu.setVector2f(Vector2(tmin, tmax))
@@ -129,6 +130,7 @@ class Dive:
                 self.selectionColor.setColor(Color(selectionBar.SELECTOR_COLOR))
             else:
                 mat.setProgram(diveLayer.pointsSectionProgram.name)
+                mat.setTransparent(False)
             
     #---------------------------------------------------------------------------
     def loadPoints(self):

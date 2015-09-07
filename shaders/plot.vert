@@ -33,8 +33,8 @@ void main(void)
     
     gl_Position.x = ((data[unif_XAxisId] - xmin) / (xmax - xmin) - 0.5) * 2;
     gl_Position.y = ((data[unif_YAxisId] - ymin) / (ymax - ymin) - 0.5) * -2;
-    gl_Position.z = 1;
+    gl_Position.z = 0;
     gl_Position.w = 1;
     
-    gl_FrontColor = vec4(1,1,1,0.2);
+    gl_FrontColor = vec4(1,0,1,0);
 }
